@@ -12,7 +12,7 @@ cap = cv2.VideoCapture("http://10.160.198.251:4747/video")
 
 # Load class names
 classFile = 'coco.names'
-objects = [ "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", 
+objects = [ "airplane", "bus", "train", "truck", 
     "boat", "traffic light", "fire hydrant", "street sign", "stop sign", 
     "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow", 
     "elephant", "bear", "zebra", "giraffe", "hat", "backpack", "umbrella", 

@@ -6,7 +6,7 @@ import datetime
 gun_cascade = cv2.CascadeClassifier('cascade.xml')
 
 # Open IP camera stream
-camera = cv2.VideoCapture("http://192.168.240.203:4747/video")
+camera = cv2.VideoCapture("http://192.10.240.203:4747/video")
 
 while True:
     ret, frame = camera.read()

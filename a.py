@@ -29,6 +29,8 @@ objects = [ "airplane", "bus", "train", "truck",
 ]
 
 
+
+
 with open(classFile, 'rt') as f:
     classNames = f.read().rstrip('\n').split('\n')
 

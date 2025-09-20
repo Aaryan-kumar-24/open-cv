@@ -74,3 +74,53 @@
  
 # cv2.imshow('Webcam',img)
 # cv2.waitKey(1)
+
+import cv2
+
+def compare_images(fake,real, dist_threshold=50, ratio_threshold=0.15):
+    # Load images
+    fake = cv2.imread("fk.png", cv2.IMREAD_GRAYSCALE)
+    real = cv2.imread("rl.png", cv2.IMREAD_GRAYSCALE)
+
+    # Use SIFT instead of ORB for better accuracy
+    sift = cv2.SIFT_create()
+
+    # Find keypoints and descriptors
+    kp1, des1 = sift.detectAndCompute(fake, None)
+    kp2, des2 = sift.detectAndCompute(real, None)
+
+    # BFMatcher with default params
+    bf = cv2.BFMatcher()
+    matches = bf.knnMatch(des1, des2, k=2)
+
+    # Apply ratio test
+    good = []
+    for m, n in matches:
+        if m.distance < 0.75 * n.distance:
+            good.append(m)
+
+    # Compute statistics
+    if len(good) == 0:
+        print("No matches found → FAKE")
+        return
+
+    avg_distance = sum([m.distance for m in good]) / len(good)
+    match_ratio = len(good) / len(kp1)
+
+    print(f"Average Good Match Distance: {avg_distance:.2f}")
+    print(f"Good Match Ratio: {match_ratio:.2f}")
+
+    # Decision logic (tuned thresholds)
+    if avg_distance < dist_threshold and match_ratio > ratio_threshold:
+        print("REAL (matches original closely)")
+    else:
+        print("FAKE (does not match original)")
+
+    # Draw matches
+    result = cv2.drawMatches(fake, kp1, real, kp2, good[:30], None, flags=2)
+    cv2.imshow("Matches", result)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+# Example usage
+compare_images("r.png", "f.png")
